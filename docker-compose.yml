@@ -30,3 +30,18 @@ services:
       - ${PWD}/standby/config:/config
       - ${PWD}/standby/archive:/mnt/server/archive
     container_name: standby
+  read:
+    image: postgres:15.0
+    env_file: .env
+    ports:
+      - 5434:5432
+    environment:
+      - POSTGRES_DB=${READ_NAME:-postgres}
+      - POSTGRES_USER=${READ_USER:-postgres}
+      - POSTGRES_PASSWORD=${READ_PASSWORD?Variable not set}
+    command: -c 'config_file=/config/postgresql.conf'
+    volumes:
+      - ${PWD}/read/pgdata:/var/lib/postgresql/data
+      - ${PWD}/read/config:/config
+      - ${PWD}/read/archive:/mnt/server/archive
+    container_name: read
