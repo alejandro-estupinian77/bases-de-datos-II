@@ -1,0 +1,6 @@
+/primary/archive
+/primary/pgdata
+/read/archive
+/read/pgdata
+/standby/archive
+/standby/pgdata
