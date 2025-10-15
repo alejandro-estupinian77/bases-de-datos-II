@@ -1,0 +1,12 @@
+[2025-10-14 15:01:54] Iniciando backup
+[2025-10-14 15:01:55] Contenedor primary no encontrado
+[2025-10-14 18:21:54] === INICIANDO BACKUP ===
+[2025-10-14 18:21:54] Usando contenedor: bases-de-datos-ii-primary-1
+[2025-10-14 18:21:54] El contenedor no esta en ejecucion. Estado: 
+[2025-10-14 18:21:54] === PROCESO COMPLETADO ===
+----------------------------------------
+[2025-10-14 18:46:36] === INICIANDO BACKUP ===
+[2025-10-14 18:46:36] Usando contenedor: primary
+[2025-10-14 18:46:37] El contenedor no esta en ejecucion. Estado: exited
+[2025-10-14 18:46:37] === PROCESO COMPLETADO ===
+----------------------------------------
