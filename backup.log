@@ -10,3 +10,17 @@
 [2025-10-14 18:46:37] El contenedor no esta en ejecucion. Estado: exited
 [2025-10-14 18:46:37] === PROCESO COMPLETADO ===
 ----------------------------------------
+[2025-10-20 10:13:27] === INICIANDO BACKUP ===
+[2025-10-20 10:13:27] Verificando conexion a PostgreSQL...
+[2025-10-20 10:13:27] Conexion establecida correctamente
+[2025-10-20 10:13:27] Creando backup: .\backups\full_backup_20251020_101327.sql
+[2025-10-20 10:13:27] Backup exitoso: 5.51 KB
+[2025-10-20 10:13:27] Aplicando retencion de 7 dias...
+[2025-10-20 10:13:27] === BACKUP COMPLETADO ===
+[2025-10-20 10:28:50] === INICIANDO BACKUP ===
+[2025-10-20 10:28:50] Verificando conexion a PostgreSQL...
+[2025-10-20 10:28:50] Conexion establecida correctamente
+[2025-10-20 10:28:50] Creando backup: .\backups\full_backup_20251020_102850.sql
+[2025-10-20 10:28:51] Backup exitoso: 19.77 KB
+[2025-10-20 10:28:51] Aplicando retencion de 7 dias...
+[2025-10-20 10:28:51] === BACKUP COMPLETADO ===

@@ -1,47 +1,72 @@
+# docker-compose.yml
+version: '3.8'
 services:
   primary:
-    image: postgres:15.0
-    env_file: .env
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_DB=${PRIMARY_NAME:-postgres}
-      - POSTGRES_USER=${PRIMARY_USER:-postgres}
-      - POSTGRES_PASSWORD=${PRIMARY_PASSWORD?Variable not set}
-    command: -c 'config_file=/config/postgresql.conf'
-    volumes:
-      - ${PWD}/primary/pgdata:/var/lib/postgresql/data
-      - ${PWD}/primary/config:/config
-      - ${PWD}/primary/archive:/mnt/server/archive
+    image: postgres:15
     container_name: primary
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - primary_data:/var/lib/postgresql/data
+      - ./backups:/backups
+    networks:
+      - postgres_network
+    command: |
+      postgres 
+      -c wal_level=replica
+      -c max_wal_senders=10
+      -c max_replication_slots=10
+      -c hot_standby=on
+      -c listen_addresses='*'
 
   standby:
-    image: postgres:15.0
-    env_file: .env
-    ports:
-      - 5435:5432
-    environment:
-      - POSTGRES_DB=${STANDBY_NAME:-postgres}
-      - POSTGRES_USER=${STANDBY_USER:-postgres}
-      - POSTGRES_PASSWORD=${STANDBY_PASSWORD?Variable not set}
-    command: -c 'config_file=/config/postgresql.conf'
-    volumes:
-      - ${PWD}/standby/pgdata:/var/lib/postgresql/data
-      - ${PWD}/standby/config:/config
-      - ${PWD}/standby/archive:/mnt/server/archive
+    image: postgres:15
     container_name: standby
-  read:
-    image: postgres:15.0
-    env_file: .env
-    ports:
-      - 5436:5432
     environment:
-      - POSTGRES_DB=${READ_NAME:-postgres}
-      - POSTGRES_USER=${READ_USER:-postgres}
-      - POSTGRES_PASSWORD=${READ_PASSWORD?Variable not set}
-    command: -c 'config_file=/config/postgresql.conf'
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5433:5432"
     volumes:
-      - ${PWD}/read/pgdata:/var/lib/postgresql/data
-      - ${PWD}/read/config:/config
-      - ${PWD}/read/archive:/mnt/server/archive
-    container_name: read
+      - standby_data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+    depends_on:
+      - primary
+    command: |
+      tail -f /dev/null
+
+  replica:
+    image: postgres:15
+    container_name: replica
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5434:5432"
+    volumes:
+      - replica_data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+    depends_on:
+      - primary
+    command: |
+      tail -f /dev/null
+
+volumes:
+  primary_data:
+  standby_data:
+  replica_data:
+
+networks:
+  postgres_network:
+    driver: bridge
